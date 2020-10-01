@@ -1,0 +1,44 @@
+import java.util.*;
+class Main
+{   static Node root;
+    private static class Node{       //tree node datatype created;
+      int data;
+      ArrayList<Node> children=new ArrayList<>();
+    }
+    
+    //d(10)->10 will print itself and it's family;
+    //d(20),d(30),d(40) will print themselves and their families;
+    //d(10)=s(10)+d(20)+d(30)+d(40);
+    static void display(Node node){         //10-->20,30,40;
+        String str=node.data+"-->";
+        for(Node child:node.children)
+            str+=child.data+",";
+        str+=".";
+        System.out.println(str);
+        for(Node child:node.children)
+            display(child);
+    }
+    
+	public static void main(String[] args) {
+	  int[] arr={10,20,50,-1,60,-1,-1,30,70,-1,80,110,-1,120,-1,-1,90,-1,-1,40,100,-1,-1,-1};
+//	  Main ob=new Main();
+//	  Node root;
+	  Stack<Node> stack=new Stack<>();
+	  for(int i=0;i<arr.length;i++){
+	      if(arr[i]==-1)
+	        stack.pop();
+	      else{
+	          Node temp=new Node();
+	          temp.data=arr[i];
+	          
+	          if(stack.size()>0){
+	              stack.peek().children.add(temp); // for more than one node we add node to children; 
+	          }else
+                    root=temp;	       //if only one node then it will be root;       
+               stack.push(temp);
+	      }
+	  }
+	  display(root);
+		
+	}
+}
