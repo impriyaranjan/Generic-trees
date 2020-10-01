@@ -1,0 +1,75 @@
+import java.util.*;
+import java.io.*;
+class Main{               //SizeOfGerericTree
+   //static Node root;    
+    private static class Node{
+        int data;
+        ArrayList<Node> children=new ArrayList<>();
+    }
+    static void display(Node node){
+        String str=node.data+"-->";
+        for(Node child:node.children)
+            str+=child.data+",";
+        str+=".";
+        System.out.println(str);
+        for(Node child:node.children)
+            display(child);
+    }
+    static Node constructGenericTree(int[] arr){
+        Node root=null;
+        
+        Stack<Node> stack=new Stack<>();
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]==-1)
+                stack.pop();
+            else{
+                Node temp=new Node();
+                temp.data=arr[i];
+                
+                if(stack.size()>0)
+                    stack.peek().children.add(temp);
+                else
+                    root=temp;
+                stack.push(temp);
+            }
+        }
+     return root;
+    }
+    static int size(Node node){
+        int size=0;
+        for(Node child:node.children)
+            size+=size(child);
+        size+=1;
+        
+        return size;
+    }
+    static int maxOfTree(Node node){
+        int max=Integer.MIN_VALUE;
+        for(Node child:node.children){
+            int cm=maxOfTree(child);
+            max=Math.max(cm,max);
+        }
+        max=Math.max(node.data,max);
+        return max;
+    }
+    static int heightOfTree(Node node){
+        int ht=-1;                      //take ht=0 for  node height;
+        for(Node child:node.children){
+            int ch=heightOfTree(child);  //ht=Math.max(heightOfTree(child),ht);
+            ht=Math.max(ch,ht);
+        }
+        ht+=1;
+        return ht;
+    }
+    public static void main(String[] args){
+       int[] arr={10,20,50,-1,60,-1,-1,30,70,-1,80,110,-1,120,-1,-1,90,-1,-1,40,100,-1,-1};
+       Node root=constructGenericTree(arr);
+       display(root);
+       int size=size(root);
+       System.out.println("Size of Generic Tree:"+size);
+       int max=maxOfTree(root);
+       System.out.println("Maximum of Generic Tree:"+max);
+       int ht=heightOfTree(root);
+       System.out.println("Height of Generic Tree:"+ht);
+    }
+}
